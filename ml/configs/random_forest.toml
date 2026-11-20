@@ -1,0 +1,25 @@
+# Ensamble por bagging. Suele ser preciso pero pesado: el criterio de tamaño (<= 20 MB)
+# de la política de calidad puede rechazarlo, lo cual es parte del análisis.
+name = "random_forest"
+description = "Random Forest con pesos de clase por muestra bootstrap"
+algorithm = "random_forest"
+seed = 42
+
+[features]
+numeric = [
+    "energy_100g", "fat_100g", "saturated_fat_100g", "trans_fat_100g", "cholesterol_100g",
+    "carbohydrates_100g", "sugars_100g", "fiber_100g", "proteins_100g", "salt_100g",
+    "calcium_100g", "iron_100g", "vitamin_a_100g", "vitamin_c_100g",
+    "fruits_vegetables_nuts_100g", "additives_n", "ingredients_from_palm_oil_n",
+    "ingredients_that_may_be_from_palm_oil_n",
+]
+categorical = ["pnns_groups_1", "pnns_groups_2"]
+min_category_frequency = 50
+
+[params]
+n_estimators = 150
+max_depth = 18
+min_samples_leaf = 5
+max_features = "sqrt"
+class_weight = "balanced_subsample"
+n_jobs = -1

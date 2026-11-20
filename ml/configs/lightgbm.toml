@@ -1,0 +1,32 @@
+# Gradient boosting. Candidato esperado a producción: preciso y con artefacto liviano.
+# deterministic + force_row_wise + n_jobs fijo => mismo modelo con los mismos datos y semilla.
+name = "lightgbm"
+description = "LightGBM con pesos de clase (candidato a producción)"
+algorithm = "lightgbm"
+seed = 42
+
+[features]
+numeric = [
+    "energy_100g", "fat_100g", "saturated_fat_100g", "trans_fat_100g", "cholesterol_100g",
+    "carbohydrates_100g", "sugars_100g", "fiber_100g", "proteins_100g", "salt_100g",
+    "calcium_100g", "iron_100g", "vitamin_a_100g", "vitamin_c_100g",
+    "fruits_vegetables_nuts_100g", "additives_n", "ingredients_from_palm_oil_n",
+    "ingredients_that_may_be_from_palm_oil_n",
+]
+categorical = ["pnns_groups_1", "pnns_groups_2"]
+min_category_frequency = 50
+
+[params]
+n_estimators = 400
+learning_rate = 0.05
+num_leaves = 63
+min_child_samples = 20
+subsample = 0.8
+subsample_freq = 1
+colsample_bytree = 0.8
+reg_lambda = 1.0
+class_weight = "balanced"
+n_jobs = 4
+deterministic = true
+force_row_wise = true
+verbose = -1

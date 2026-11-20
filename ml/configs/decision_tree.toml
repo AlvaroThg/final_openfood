@@ -1,0 +1,21 @@
+# Línea base: un solo árbol. Interpretable; su F1 macro calibra el suelo de la política qp-1.
+name = "decision_tree"
+description = "Línea base: árbol de decisión con pesos de clase"
+algorithm = "decision_tree"
+seed = 42
+
+[features]
+numeric = [
+    "energy_100g", "fat_100g", "saturated_fat_100g", "trans_fat_100g", "cholesterol_100g",
+    "carbohydrates_100g", "sugars_100g", "fiber_100g", "proteins_100g", "salt_100g",
+    "calcium_100g", "iron_100g", "vitamin_a_100g", "vitamin_c_100g",
+    "fruits_vegetables_nuts_100g", "additives_n", "ingredients_from_palm_oil_n",
+    "ingredients_that_may_be_from_palm_oil_n",
+]
+categorical = ["pnns_groups_1", "pnns_groups_2"]
+min_category_frequency = 50
+
+[params]
+max_depth = 20          # limita el sobreajuste y el tamaño del artefacto
+min_samples_leaf = 20
+class_weight = "balanced"

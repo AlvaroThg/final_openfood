@@ -1,0 +1,7 @@
+# Fin de línea LF en el repositorio y en la copia de trabajo: los scripts .sh y los archivos
+# que se montan en contenedores Linux fallan con CRLF.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.joblib binary
+*.parquet binary

@@ -1,0 +1,32 @@
+# Experimento 2 (solo notebook, NO se despliega): mismo modelo SIN las 7 variables de la
+# fórmula oficial (energía, grasas saturadas, azúcares, sal, fibra, proteínas, frutas/verduras).
+# Mide cuánto del grado se predice sin "copiar" la fórmula. Ojo: grasas totales y
+# carbohidratos siguen correlacionados con grasas saturadas y azúcares (variables proxy).
+name = "lightgbm_sin_formula"
+description = "Experimento 2: LightGBM sin las variables de la fórmula del Nutri-Score"
+algorithm = "lightgbm"
+seed = 42
+
+[features]
+numeric = [
+    "fat_100g", "trans_fat_100g", "cholesterol_100g", "carbohydrates_100g",
+    "calcium_100g", "iron_100g", "vitamin_a_100g", "vitamin_c_100g",
+    "additives_n", "ingredients_from_palm_oil_n", "ingredients_that_may_be_from_palm_oil_n",
+]
+categorical = ["pnns_groups_1", "pnns_groups_2"]
+min_category_frequency = 50
+
+[params]
+n_estimators = 400
+learning_rate = 0.05
+num_leaves = 63
+min_child_samples = 20
+subsample = 0.8
+subsample_freq = 1
+colsample_bytree = 0.8
+reg_lambda = 1.0
+class_weight = "balanced"
+n_jobs = 4
+deterministic = true
+force_row_wise = true
+verbose = -1

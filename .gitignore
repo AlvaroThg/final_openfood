@@ -1,0 +1,48 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# --- Node / Next.js ---
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# --- Datos y artefactos (pesados o regenerables; nunca en git) ---
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+models/*
+!models/.gitkeep
+
+# --- Secretos ---
+.env
+.env.*
+!.env.example
+secrets/
+*.pem
+*.key
+
+# --- Backups ---
+backups/
+
+# --- Notas privadas (no son parte del entregable) ---
+DEFENSA.md
+
+# --- SO / editores ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.qodo/
