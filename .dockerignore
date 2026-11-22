@@ -1,0 +1,27 @@
+# El contexto de build es la raíz del repositorio. Cada Dockerfile copia solo lo que necesita;
+# esto evita además enviar al daemon entornos, datos, modelos y secretos.
+.git
+.venv
+venv
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.ruff_cache
+.mypy_cache
+**/*.egg-info
+.qodo
+.vscode
+.idea
+data
+models
+backups
+secrets
+**/*.pem
+**/*.key
+.env
+.env.*
+DEFENSA.md
+ml/notebooks
+frontend/node_modules
+frontend/.next
+tests

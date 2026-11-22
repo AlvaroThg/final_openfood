@@ -1,0 +1,30 @@
+# Versiones exactas de TODAS las dependencias de los servicios (fuente única).
+# Cada servicio lista en su requirements.txt QUÉ necesita; este archivo fija la versión.
+# Los extras ([crypto], [argon2], [binary]) se piden en requirements.txt: pip no los admite aquí.
+# Uso: pip install -r services/<servicio>/requirements.txt -c services/constraints.txt
+# Las dependencias de ML (scikit-learn, lightgbm, ...) se fijan en ml/pyproject.toml.
+
+# --- HTTP ---
+fastapi==0.162.0
+uvicorn==0.54.0
+pydantic==2.14.2
+starlette==1.10.0
+httpx2==2.16.0  # cliente de pruebas de Starlette (sucesor de httpx)
+
+# --- Seguridad ---
+pyjwt==2.15.1
+cryptography==50.0.2
+pwdlib==0.3.1
+argon2-cffi==25.1.0
+
+# --- PostgreSQL ---
+psycopg==3.3.6
+psycopg-binary==3.3.6
+psycopg-pool==3.3.3
+
+# --- Migraciones (solo el contenedor migrate) ---
+alembic==1.20.1
+sqlalchemy==2.1.6
+
+# --- Desarrollo ---
+mypy==2.4.1

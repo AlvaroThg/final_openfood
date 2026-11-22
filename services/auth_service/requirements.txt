@@ -1,0 +1,11 @@
+# Dependencias de auth_service (y de svc_common). Las versiones se fijan en ../constraints.txt.
+fastapi
+uvicorn
+pydantic
+pyjwt[crypto]
+cryptography
+pwdlib[argon2]
+argon2-cffi
+psycopg[binary]
+psycopg-binary
+psycopg-pool

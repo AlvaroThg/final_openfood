@@ -1,0 +1,31 @@
+# PostgreSQL efímero para las pruebas de integración (local y CI).
+#   docker compose -f docker-compose.test.yml up -d --wait
+#   pytest -m integration
+#   docker compose -f docker-compose.test.yml down
+#
+# Usa el MISMO script de roles que producción (db/initdb) y datos en memoria (tmpfs).
+# Las contraseñas son solo de prueba y coinciden con los valores por defecto de tests/conftest.py.
+name: nutriscore-test
+
+services:
+  postgres:
+    image: postgres:16.14-alpine
+    environment:
+      POSTGRES_DB: nutriscore
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: test-superuser
+      APP_MIGRATOR_DB_PASSWORD: test-migrator
+      APP_AUTH_DB_PASSWORD: test-auth
+      APP_IA_DB_PASSWORD: test-ia
+      APP_RETRAIN_DB_PASSWORD: test-retrain
+    ports:
+      - "127.0.0.1:55432:5432"
+    volumes:
+      - ./db/initdb:/docker-entrypoint-initdb.d:ro
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d nutriscore"]
+      interval: 2s
+      timeout: 3s
+      retries: 20

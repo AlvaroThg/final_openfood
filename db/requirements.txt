@@ -1,0 +1,5 @@
+# Dependencias del contenedor `migrate`. Las versiones se fijan en ../services/constraints.txt.
+alembic
+sqlalchemy
+psycopg[binary]
+psycopg-binary
