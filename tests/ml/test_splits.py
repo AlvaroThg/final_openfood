@@ -46,7 +46,9 @@ def test_stratified_sample_keeps_proportions_and_size() -> None:
     frame = make_clean_frame(n_rows=5_000, seed=8)
     sample = stratified_sample(frame, 1_000, seed=1)
     assert len(sample) == 1_000
-    diff = (sample[schema.TARGET].value_counts(normalize=True)
-            - frame[schema.TARGET].value_counts(normalize=True)).abs()
+    diff = (
+        sample[schema.TARGET].value_counts(normalize=True)
+        - frame[schema.TARGET].value_counts(normalize=True)
+    ).abs()
     assert diff.max() < 0.01
     assert len(stratified_sample(frame, 10_000, seed=1)) == len(frame)

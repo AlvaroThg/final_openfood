@@ -31,8 +31,12 @@ def test_transition_table_is_exactly_the_documented_one(current: S, target: S) -
 
 @pytest.mark.parametrize(
     ("current", "target"),
-    [(S.REJECTED, S.ACTIVE), (S.CANDIDATE, S.ACTIVE), (S.EVALUATING, S.ACTIVE),
-     (S.ACTIVE, S.APPROVED)],
+    [
+        (S.REJECTED, S.ACTIVE),
+        (S.CANDIDATE, S.ACTIVE),
+        (S.EVALUATING, S.ACTIVE),
+        (S.ACTIVE, S.APPROVED),
+    ],
 )
 def test_invalid_transitions_raise(current: S, target: S) -> None:
     with pytest.raises(InvalidTransitionError):

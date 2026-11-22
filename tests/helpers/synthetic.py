@@ -13,8 +13,14 @@ import pandas as pd
 
 from nutriscore import schema
 
-PNNS_1 = ["Sugary snacks", "Beverages", "Milk and dairy products", "Cereals and potatoes",
-          "unknown", None]
+PNNS_1 = [
+    "Sugary snacks",
+    "Beverages",
+    "Milk and dairy products",
+    "Cereals and potatoes",
+    "unknown",
+    None,
+]
 PNNS_2 = ["Biscuits and cakes", "Sweetened beverages", "Cheese", "Bread", "unknown", None]
 
 
@@ -38,31 +44,34 @@ def make_clean_frame(n_rows: int = 3_000, seed: int = 0) -> pd.DataFrame:
     score = energy / 400 + saturated / 1.5 + sugars / 5 + salt * 4 - fiber / 1.5 - proteins / 4
     grade = pd.qcut(score, q=5, labels=list(schema.GRADES)).astype(str)
 
-    frame = pd.DataFrame({
-        schema.ID_COLUMN: [f"{seed:02d}{i:010d}" for i in range(n_rows)],
-        schema.TARGET: grade,
-        "energy_100g": energy,
-        "fat_100g": fat,
-        "saturated_fat_100g": saturated,
-        "trans_fat_100g": _with_missing(rng, fat * 0.05, 0.7),
-        "cholesterol_100g": _with_missing(rng, rng.uniform(0, 0.1, n_rows), 0.7),
-        "carbohydrates_100g": carbs,
-        "sugars_100g": sugars,
-        "fiber_100g": _with_missing(rng, fiber, 0.3),
-        "proteins_100g": proteins,
-        "salt_100g": salt,
-        "calcium_100g": _with_missing(rng, rng.uniform(0, 1, n_rows), 0.6),
-        "iron_100g": _with_missing(rng, rng.uniform(0, 0.01, n_rows), 0.6),
-        "vitamin_a_100g": _with_missing(rng, rng.uniform(0, 0.001, n_rows), 0.6),
-        "vitamin_c_100g": _with_missing(rng, rng.uniform(0, 0.05, n_rows), 0.6),
-        "fruits_vegetables_nuts_100g": _with_missing(rng, rng.uniform(0, 100, n_rows), 0.9),
-        "additives_n": _with_missing(rng, rng.integers(0, 10, n_rows), 0.2),
-        "ingredients_from_palm_oil_n": _with_missing(rng, rng.integers(0, 2, n_rows), 0.2),
-        "ingredients_that_may_be_from_palm_oil_n": _with_missing(rng, rng.integers(0, 3, n_rows),
-                                                                 0.2),
-        "pnns_groups_1": rng.choice(np.array(PNNS_1, dtype=object), n_rows),
-        "pnns_groups_2": rng.choice(np.array(PNNS_2, dtype=object), n_rows),
-    })
+    frame = pd.DataFrame(
+        {
+            schema.ID_COLUMN: [f"{seed:02d}{i:010d}" for i in range(n_rows)],
+            schema.TARGET: grade,
+            "energy_100g": energy,
+            "fat_100g": fat,
+            "saturated_fat_100g": saturated,
+            "trans_fat_100g": _with_missing(rng, fat * 0.05, 0.7),
+            "cholesterol_100g": _with_missing(rng, rng.uniform(0, 0.1, n_rows), 0.7),
+            "carbohydrates_100g": carbs,
+            "sugars_100g": sugars,
+            "fiber_100g": _with_missing(rng, fiber, 0.3),
+            "proteins_100g": proteins,
+            "salt_100g": salt,
+            "calcium_100g": _with_missing(rng, rng.uniform(0, 1, n_rows), 0.6),
+            "iron_100g": _with_missing(rng, rng.uniform(0, 0.01, n_rows), 0.6),
+            "vitamin_a_100g": _with_missing(rng, rng.uniform(0, 0.001, n_rows), 0.6),
+            "vitamin_c_100g": _with_missing(rng, rng.uniform(0, 0.05, n_rows), 0.6),
+            "fruits_vegetables_nuts_100g": _with_missing(rng, rng.uniform(0, 100, n_rows), 0.9),
+            "additives_n": _with_missing(rng, rng.integers(0, 10, n_rows), 0.2),
+            "ingredients_from_palm_oil_n": _with_missing(rng, rng.integers(0, 2, n_rows), 0.2),
+            "ingredients_that_may_be_from_palm_oil_n": _with_missing(
+                rng, rng.integers(0, 3, n_rows), 0.2
+            ),
+            "pnns_groups_1": rng.choice(np.array(PNNS_1, dtype=object), n_rows),
+            "pnns_groups_2": rng.choice(np.array(PNNS_2, dtype=object), n_rows),
+        }
+    )
     return frame[list(schema.CANONICAL_COLUMNS)]
 
 

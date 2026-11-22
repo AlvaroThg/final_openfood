@@ -24,26 +24,39 @@ from nutriscore.artifacts import (
 
 @pytest.fixture
 def saved(tmp_path: Path, trained_pipeline: Pipeline, splits: dict[str, pd.DataFrame]):
-    info = save_artifact(trained_pipeline, tmp_path, "1.0.0",
-                         metadata={"algorithm": "lightgbm"},
-                         metrics={"validation": {"f1_macro": 0.9}},
-                         golden_frame=splits["val"].head(20))
+    info = save_artifact(
+        trained_pipeline,
+        tmp_path,
+        "1.0.0",
+        metadata={"algorithm": "lightgbm"},
+        metrics={"validation": {"f1_macro": 0.9}},
+        golden_frame=splits["val"].head(20),
+    )
     return tmp_path, info
 
 
-def test_round_trip_reproduces_predictions(saved, trained_pipeline: Pipeline,
-                                           splits: dict[str, pd.DataFrame]) -> None:
+def test_round_trip_reproduces_predictions(
+    saved, trained_pipeline: Pipeline, splits: dict[str, pd.DataFrame]
+) -> None:
     root, info = saved
     loaded = load_artifact(root, "1.0.0", info.sha256)
     features = splits["val"][list(schema.FEATURE_NAMES)]
-    assert np.array_equal(loaded.pipeline.predict_proba(features),
-                          trained_pipeline.predict_proba(features))
-    assert loaded.metadata["artifact"] == {"file": "model.joblib", "sha256": info.sha256,
-                                           "size_bytes": info.size_bytes}
+    assert np.array_equal(
+        loaded.pipeline.predict_proba(features), trained_pipeline.predict_proba(features)
+    )
+    assert loaded.metadata["artifact"] == {
+        "file": "model.joblib",
+        "sha256": info.sha256,
+        "size_bytes": info.size_bytes,
+    }
     assert loaded.metadata["dependencies"]["scikit-learn"]
     assert loaded.metadata["version"] == "1.0.0"
     assert sorted(p.name for p in info.path.iterdir()) == [
-        "golden.json", "metadata.json", "metrics.json", "model.joblib"]
+        "golden.json",
+        "metadata.json",
+        "metrics.json",
+        "model.joblib",
+    ]
 
 
 def test_versions_are_immutable(saved, trained_pipeline: Pipeline) -> None:
@@ -88,8 +101,9 @@ def test_missing_version_is_reported(tmp_path: Path) -> None:
         load_artifact(tmp_path, "9.9.9", "0" * 64)
 
 
-def test_golden_detects_a_different_model(saved, splits: dict[str, pd.DataFrame],
-                                          small_lgbm_config) -> None:
+def test_golden_detects_a_different_model(
+    saved, splits: dict[str, pd.DataFrame], small_lgbm_config
+) -> None:
     import dataclasses
 
     from nutriscore.training import fit
@@ -99,20 +113,25 @@ def test_golden_detects_a_different_model(saved, splits: dict[str, pd.DataFrame]
     assert loaded.golden is not None
     assert verify_golden(loaded.pipeline, loaded.golden)
 
-    other = fit(dataclasses.replace(small_lgbm_config, seed=99,
-                                    params={**small_lgbm_config.params, "n_estimators": 5}),
-                splits["train"])
+    other = fit(
+        dataclasses.replace(
+            small_lgbm_config, seed=99, params={**small_lgbm_config.params, "n_estimators": 5}
+        ),
+        splits["train"],
+    )
     assert not verify_golden(other, loaded.golden)
 
 
-def test_reload_parity_holds_for_saved_artifact(saved, trained_pipeline: Pipeline,
-                                                splits: dict[str, pd.DataFrame]) -> None:
+def test_reload_parity_holds_for_saved_artifact(
+    saved, trained_pipeline: Pipeline, splits: dict[str, pd.DataFrame]
+) -> None:
     root, info = saved
     assert reload_parity(trained_pipeline, root, info, splits["val"])
 
 
-def test_failed_save_leaves_no_partial_version(tmp_path: Path, trained_pipeline: Pipeline,
-                                               monkeypatch) -> None:
+def test_failed_save_leaves_no_partial_version(
+    tmp_path: Path, trained_pipeline: Pipeline, monkeypatch
+) -> None:
     def broken_dump(*args, **kwargs):
         raise OSError("disco lleno")
 

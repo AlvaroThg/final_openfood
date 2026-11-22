@@ -1,0 +1,204 @@
+# OpenFood NutriScore: todo el sistema en local, en cualquier computadora con Docker.
+#
+#   python scripts/init_env.py                    # una sola vez: genera .env con secretos aleatorios
+#   docker compose up -d --build                  # levanta los servicios
+#   docker compose --profile bootstrap run --rm bootstrap   # primer modelo (ver README)
+#   abrir http://localhost:3000
+#
+# Red: solo el frontend publica un puerto (y solo en 127.0.0.1). Los demás servicios viven en la
+# red interna `backend`, sin salida a internet; el navegador llega a ellos a través del proxy del
+# frontend, que reenvía únicamente rutas explícitas (nunca /internal ni /auth/token).
+name: nutriscore
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "3" }
+
+x-retrain-env: &retrain-env
+  DATABASE_URL: postgresql://app_retrain:${APP_RETRAIN_DB_PASSWORD}@postgres:5432/nutriscore
+  JWKS_URL: http://auth_service:8000/.well-known/jwks.json
+  AUTH_URL: http://auth_service:8000
+  IA_URL: http://ia_backend:8000
+  DATASETS_DIR: /datasets
+  IMPORT_DIR: /import
+  MODELS_DIR: /models
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+services:
+  postgres:
+    image: postgres:16.14-alpine
+    environment:
+      POSTGRES_DB: nutriscore
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Ejecuta python scripts/init_env.py}
+      APP_MIGRATOR_DB_PASSWORD: ${APP_MIGRATOR_DB_PASSWORD}
+      APP_AUTH_DB_PASSWORD: ${APP_AUTH_DB_PASSWORD}
+      APP_IA_DB_PASSWORD: ${APP_IA_DB_PASSWORD}
+      APP_RETRAIN_DB_PASSWORD: ${APP_RETRAIN_DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/initdb:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d nutriscore"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+    networks: [backend]
+    restart: unless-stopped
+    deploy: { resources: { limits: { memory: 512m } } }
+    logging: *logging
+
+  migrate:
+    build: { context: ., dockerfile: db/Dockerfile }
+    image: nutriscore/migrate:1.0.0
+    environment:
+      MIGRATIONS_DATABASE_URL: postgresql://app_migrator:${APP_MIGRATOR_DB_PASSWORD}@postgres:5432/nutriscore
+    depends_on:
+      postgres: { condition: service_healthy }
+    networks: [backend]
+    restart: "no"
+    logging: *logging
+
+  keygen:
+    build: { context: ., dockerfile: services/auth_service/Dockerfile }
+    image: nutriscore/auth_service:1.0.0
+    command: ["python", "-m", "app.keygen", "/keys/jwt_private.pem"]
+    volumes:
+      - jwt_keys:/keys
+    network_mode: none
+    restart: "no"
+    logging: *logging
+
+  auth_service:
+    image: nutriscore/auth_service:1.0.0
+    environment:
+      DATABASE_URL: postgresql://app_auth:${APP_AUTH_DB_PASSWORD}@postgres:5432/nutriscore
+      JWT_PRIVATE_KEY_PATH: /keys/jwt_private.pem
+      SERVICE_CLIENTS: retrain_service:${RETRAIN_CLIENT_SECRET_SHA256}
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      TRUSTED_PROXY_HOPS: "1"  # el proxy del frontend agrega la IP real del navegador
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - jwt_keys:/keys:ro
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      keygen: { condition: service_completed_successfully }
+    networks: [backend]
+    restart: unless-stopped
+    deploy: { resources: { limits: { memory: 256m } } }
+    logging: *logging
+
+  ia_backend:
+    build: { context: ., dockerfile: services/ia_backend/Dockerfile }
+    image: nutriscore/ia_backend:1.0.0
+    environment:
+      DATABASE_URL: postgresql://app_ia:${APP_IA_DB_PASSWORD}@postgres:5432/nutriscore
+      JWKS_URL: http://auth_service:8000/.well-known/jwks.json
+      MODELS_DIR: /models
+      INTERNAL_CLIENTS: retrain_service
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - models:/models:ro  # solo lectura: ia_backend nunca escribe modelos
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      auth_service: { condition: service_healthy }
+    networks: [backend]
+    restart: unless-stopped
+    deploy: { resources: { limits: { memory: 768m } } }
+    logging: *logging
+
+  retrain_api:
+    build: { context: ., dockerfile: services/retrain_service/Dockerfile }
+    image: nutriscore/retrain_service:1.0.0
+    environment: *retrain-env
+    volumes:
+      - models:/models
+      - datasets:/datasets
+      - ./data:/import:ro
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      auth_service: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request, sys; sys.exit(urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=2).status != 200)"]
+      interval: 10s
+      timeout: 3s
+      start_period: 30s
+      retries: 5
+    networks: [backend]
+    restart: unless-stopped
+    deploy: { resources: { limits: { memory: 1g } } }
+    logging: *logging
+
+  retrain_worker:
+    image: nutriscore/retrain_service:1.0.0
+    command: ["python", "-m", "retrain_service.worker.main"]
+    environment:
+      <<: *retrain-env
+      SERVICE_CLIENT_ID: retrain_service
+      SERVICE_CLIENT_SECRET: ${RETRAIN_CLIENT_SECRET}
+    volumes:
+      - models:/models
+      - datasets:/datasets
+    depends_on:
+      retrain_api: { condition: service_healthy }
+      ia_backend: { condition: service_healthy }
+    healthcheck:
+      test: ["CMD", "python", "-c", "import os, sys, time; sys.exit(time.time() - os.path.getmtime('/tmp/worker.alive') > 120)"]
+      interval: 30s
+      timeout: 3s
+      start_period: 30s
+      retries: 3
+    networks: [backend]
+    restart: unless-stopped
+    # Entrenar con el dataset completo necesita memoria; si se queda sin ella, muere solo el
+    # worker y la predicción sigue funcionando.
+    deploy: { resources: { limits: { memory: 3g } } }
+    logging: *logging
+
+  # Uso único: prepara el dataset, lo registra y entrena el primer modelo por el flujo normal.
+  bootstrap:
+    image: nutriscore/retrain_service:1.0.0
+    profiles: ["bootstrap"]
+    command: ["python", "-m", "retrain_service.worker.bootstrap"]
+    environment:
+      DATASETS_DIR: /datasets
+      IMPORT_DIR: /import
+      AUTH_URL: http://auth_service:8000
+      IA_URL: http://ia_backend:8000
+      RETRAIN_API_URL: http://retrain_api:8000
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - datasets:/datasets
+      - ./data:/import:ro
+    depends_on:
+      retrain_worker: { condition: service_started }
+    networks: [backend]
+    restart: "no"
+    deploy: { resources: { limits: { memory: 3g } } }
+
+  frontend:
+    build: { context: frontend }
+    image: nutriscore/frontend:1.0.0
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      auth_service: { condition: service_healthy }
+      ia_backend: { condition: service_healthy }
+    networks: [backend, edge]
+    restart: unless-stopped
+    deploy: { resources: { limits: { memory: 256m } } }
+    logging: *logging
+
+networks:
+  backend:
+    internal: true  # sin salida a internet ni puertos publicados
+  edge: {}
+
+volumes:
+  pgdata:
+  models:
+  datasets:
+  jwt_keys:

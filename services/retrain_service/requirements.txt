@@ -1,0 +1,10 @@
+# Dependencias HTTP/BD de retrain_service (y de svc_common). Versiones: ../constraints.txt.
+# Las de ML (scikit-learn, lightgbm, ...) las trae el paquete ml/ (nutriscore) con versión exacta.
+fastapi
+uvicorn
+pydantic
+pyjwt[crypto]
+cryptography
+psycopg[binary]
+psycopg-binary
+psycopg-pool

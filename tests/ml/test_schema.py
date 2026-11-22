@@ -19,7 +19,11 @@ def test_leakage_and_redundant_columns_are_never_loaded() -> None:
 def test_required_api_fields_are_formula_nutrients() -> None:
     assert set(schema.REQUIRED_FEATURES) <= set(schema.FORMULA_FEATURES)
     assert set(schema.REQUIRED_FEATURES) == {
-        "energy_100g", "saturated_fat_100g", "sugars_100g", "proteins_100g", "salt_100g"
+        "energy_100g",
+        "saturated_fat_100g",
+        "sugars_100g",
+        "proteins_100g",
+        "salt_100g",
     }
 
 
@@ -39,18 +43,22 @@ def test_consistency_rule_detects_violation(record: dict[str, float], rule: str)
 
 
 def test_consistency_tolerates_rounding_and_ignores_missing() -> None:
-    frame = schema.to_feature_frame([
-        {"fat_100g": 5, "saturated_fat_100g": 5.4},  # dentro de la tolerancia de 0,5 g
-        {"saturated_fat_100g": 80},  # grasa total faltante: no se puede afirmar violación
-        {},
-    ])
+    frame = schema.to_feature_frame(
+        [
+            {"fat_100g": 5, "saturated_fat_100g": 5.4},  # dentro de la tolerancia de 0,5 g
+            {"saturated_fat_100g": 80},  # grasa total faltante: no se puede afirmar violación
+            {},
+        ]
+    )
     assert not schema.consistency_violations(frame).to_numpy().any()
 
 
 def test_range_violations_flag_only_out_of_range_values() -> None:
-    frame = schema.to_feature_frame([
-        {"sugars_100g": 101, "energy_100g": 3900, "salt_100g": -1, "proteins_100g": 50},
-    ])
+    frame = schema.to_feature_frame(
+        [
+            {"sugars_100g": 101, "energy_100g": 3900, "salt_100g": -1, "proteins_100g": 50},
+        ]
+    )
     flagged = schema.range_violations(frame).loc[0]
     assert set(flagged[flagged].index) == {"sugars_100g", "energy_100g", "salt_100g"}
 

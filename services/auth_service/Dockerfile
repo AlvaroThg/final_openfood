@@ -17,8 +17,9 @@ RUN pip install -r /tmp/requirements.txt -c /tmp/constraints.txt
 COPY services/common/svc_common ./svc_common
 COPY services/auth_service/app ./app
 
-# Usuario sin privilegios. La clave privada se monta como secreto de solo lectura.
-RUN useradd --system --uid 10001 --no-create-home appuser
+# Usuario sin privilegios. /keys es el punto de montaje del volumen jwt_keys: creado con este
+# dueño, un volumen nuevo lo hereda y `keygen` puede escribir la clave (0600) ahí.
+RUN useradd --system --uid 10001 --no-create-home appuser     && mkdir -p /keys && chown appuser /keys && chmod 700 /keys
 USER appuser
 
 EXPOSE 8000

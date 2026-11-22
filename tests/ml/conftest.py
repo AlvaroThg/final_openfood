@@ -29,14 +29,22 @@ def small_lgbm_config() -> TrainingConfig:
         seed=7,
         numeric_features=schema.NUMERIC_NAMES,
         categorical_features=schema.CATEGORICAL_NAMES,
-        params={"n_estimators": 60, "num_leaves": 15, "learning_rate": 0.1,
-                "class_weight": "balanced", "n_jobs": 1, "deterministic": True,
-                "force_row_wise": True, "verbose": -1},
+        params={
+            "n_estimators": 60,
+            "num_leaves": 15,
+            "learning_rate": 0.1,
+            "class_weight": "balanced",
+            "n_jobs": 1,
+            "deterministic": True,
+            "force_row_wise": True,
+            "verbose": -1,
+        },
         min_category_frequency=10,
     )
 
 
 @pytest.fixture(scope="session")
-def trained_pipeline(small_lgbm_config: TrainingConfig,
-                     splits: dict[str, pd.DataFrame]) -> Pipeline:
+def trained_pipeline(
+    small_lgbm_config: TrainingConfig, splits: dict[str, pd.DataFrame]
+) -> Pipeline:
     return fit(small_lgbm_config, splits["train"])

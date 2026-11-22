@@ -33,8 +33,7 @@ verbose = -1
 
 def test_prepare_then_train_produces_traceable_model(tmp_path: Path) -> None:
     raw_path = tmp_path / "off.tsv"
-    to_raw_frame(make_clean_frame(n_rows=4_000, seed=11)).to_csv(raw_path, sep="\t",
-                                                                  index=False)
+    to_raw_frame(make_clean_frame(n_rows=4_000, seed=11)).to_csv(raw_path, sep="\t", index=False)
     parquet = tmp_path / "clean_v1.parquet"
 
     prepare = load_script("prepare_data")
@@ -44,13 +43,24 @@ def test_prepare_then_train_produces_traceable_model(tmp_path: Path) -> None:
     assert report["rows_final"] == len(pd.read_parquet(parquet)) == 4_000
 
     config_path = tmp_path / "fast.toml"
-    config_path.write_text(FAST_CONFIG.format(numeric=json.dumps(list(schema.NUMERIC_NAMES))),
-                           encoding="utf-8")
+    config_path.write_text(
+        FAST_CONFIG.format(numeric=json.dumps(list(schema.NUMERIC_NAMES))), encoding="utf-8"
+    )
     models = tmp_path / "models"
-    exit_code = load_script("train").main([
-        "--config", str(config_path), "--data", str(parquet), "--dataset-version", "v1",
-        "--models-dir", str(models), "--version", "1.0.0",
-    ])
+    exit_code = load_script("train").main(
+        [
+            "--config",
+            str(config_path),
+            "--data",
+            str(parquet),
+            "--dataset-version",
+            "v1",
+            "--models-dir",
+            str(models),
+            "--version",
+            "1.0.0",
+        ]
+    )
 
     gate = json.loads((models / "v1.0.0.gate.json").read_text(encoding="utf-8"))
     assert exit_code == (0 if gate["passed"] else 3)

@@ -35,8 +35,9 @@ def test_slice_report_skips_groups_without_enough_support() -> None:
     assert result["big"]["support"] == 10
 
 
-def test_evaluate_pipeline_includes_slices(trained_pipeline: Pipeline,
-                                           splits: dict[str, pd.DataFrame]) -> None:
+def test_evaluate_pipeline_includes_slices(
+    trained_pipeline: Pipeline, splits: dict[str, pd.DataFrame]
+) -> None:
     report = evaluate_pipeline(trained_pipeline, splits["val"], min_slice_support=30)
     assert report["slices"]["column"] == "pnns_groups_1"
     assert "sugary snacks" in report["slices"]["groups"]

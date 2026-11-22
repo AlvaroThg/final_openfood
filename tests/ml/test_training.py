@@ -40,8 +40,9 @@ def test_experiment_2_excludes_all_formula_variables() -> None:
         ({"params": {"random_state": 1}}, "seed"),
     ],
 )
-def test_invalid_config_fails_fast(small_lgbm_config: TrainingConfig, change: dict,
-                                   message: str) -> None:
+def test_invalid_config_fails_fast(
+    small_lgbm_config: TrainingConfig, change: dict, message: str
+) -> None:
     with pytest.raises(ConfigError, match=message):
         dataclasses.replace(small_lgbm_config, **change)
 
@@ -57,16 +58,18 @@ def test_fit_rejects_training_data_without_all_classes(
 def test_train_and_evaluate_learns_and_keeps_test_out_unless_asked(
     small_lgbm_config: TrainingConfig, splits: dict[str, pd.DataFrame]
 ) -> None:
-    result = train_and_evaluate(small_lgbm_config, splits, evaluate_test=False,
-                                min_slice_support=50)
+    result = train_and_evaluate(
+        small_lgbm_config, splits, evaluate_test=False, min_slice_support=50
+    )
     assert result.test is None
     assert result.validation["n"] == len(splits["val"])
     assert result.validation["f1_macro"] > 0.6
     assert result.train_rows == len(splits["train"])
 
 
-def test_training_is_reproducible(small_lgbm_config: TrainingConfig,
-                                  splits: dict[str, pd.DataFrame]) -> None:
+def test_training_is_reproducible(
+    small_lgbm_config: TrainingConfig, splits: dict[str, pd.DataFrame]
+) -> None:
     features = splits["val"][list(schema.FEATURE_NAMES)]
     first = fit(small_lgbm_config, splits["train"]).predict_proba(features)
     second = fit(small_lgbm_config, splits["train"]).predict_proba(features)
@@ -77,10 +80,14 @@ def test_training_is_reproducible(small_lgbm_config: TrainingConfig,
 def test_baseline_algorithms_train_on_the_same_pipeline(
     algorithm: str, splits: dict[str, pd.DataFrame]
 ) -> None:
-    config = TrainingConfig(name=algorithm, algorithm=algorithm, seed=1,
-                            numeric_features=schema.NUMERIC_NAMES,
-                            categorical_features=schema.CATEGORICAL_NAMES,
-                            params={"class_weight": "balanced", "max_depth": 6},
-                            min_category_frequency=10)
+    config = TrainingConfig(
+        name=algorithm,
+        algorithm=algorithm,
+        seed=1,
+        numeric_features=schema.NUMERIC_NAMES,
+        categorical_features=schema.CATEGORICAL_NAMES,
+        params={"class_weight": "balanced", "max_depth": 6},
+        min_category_frequency=10,
+    )
     pipeline = fit(config, splits["train"])
     assert list(pipeline.classes_) == list(schema.GRADES)
