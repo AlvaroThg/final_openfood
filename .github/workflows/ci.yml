@@ -1,0 +1,63 @@
+# CI (AGENTS.md §11): lint → tipos → unitarias → integración con Postgres real → frontend →
+# configuración de compose → build de imágenes.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-24.04
+    env:
+      REQUIRE_INTEGRATION: "1"  # sin Postgres, las pruebas de integración FALLAN (no se omiten)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Dependencias
+        run: |
+          pip install -e "ml[dev,notebook]"
+          pip install -c services/constraints.txt fastapi uvicorn pydantic "pyjwt[crypto]" \
+            cryptography "pwdlib[argon2]" "psycopg[binary]" psycopg-pool alembic sqlalchemy \
+            httpx2 mypy
+      - name: Lint
+        run: ruff check .
+      - name: Tipos
+        run: >
+          mypy services/common/svc_common services/auth_service/app
+          services/ia_backend/app services/retrain_service
+      - name: PostgreSQL de prueba (mismo script de roles que producción)
+        run: docker compose -f docker-compose.test.yml up -d --wait
+      - name: Pruebas (unitarias + integración + notebook)
+        run: pytest
+
+  frontend:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.14.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run build
+
+  images:
+    runs-on: ubuntu-24.04
+    needs: [python, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configuración de compose
+        run: |
+          python scripts/init_env.py --output .env
+          docker compose config --quiet
+      - name: Build de todas las imágenes
+        run: docker compose build

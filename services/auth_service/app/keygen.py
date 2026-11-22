@@ -40,7 +40,9 @@ def ensure_key(path: Path) -> bool:
 
 def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else sys.argv[1:]
-    path = Path(args[0] if args else os.environ.get("JWT_PRIVATE_KEY_PATH", "/keys/jwt_private.pem"))
+    path = Path(
+        args[0] if args else os.environ.get("JWT_PRIVATE_KEY_PATH", "/keys/jwt_private.pem")
+    )
     created = ensure_key(path)
     print(f"[keygen] {'clave creada' if created else 'la clave ya existía'}: {path}", flush=True)
     return 0
