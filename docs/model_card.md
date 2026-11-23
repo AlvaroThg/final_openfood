@@ -1,6 +1,6 @@
 # Model card: clasificador Nutri-Score
 
-> Las cifras de esta tarjeta se completan con la ejecución del notebook sobre el dataset real. La plataforma también las muestra en la sección **Modelo** (`GET /model/metrics`).
+> Las cifras provienen de entrenar con el dataset real. La plataforma también las muestra en la sección **Modelo** (`GET /model/metrics`).
 
 ## Uso previsto
 
@@ -33,17 +33,22 @@
 | Preprocesamiento | Mediana + indicador de faltante; categorías normalizadas + one-hot con frecuencia mínima |
 | Artefacto | `models/vX.Y.Z/` inmutable, con hash, metadata, métricas, golden y versiones exactas de las dependencias |
 
-## Métricas (completar con el notebook)
+## Métricas con el dataset real
 
-| Modelo | F1 macro (val.) | Accuracy (val.) | F1 macro (test) |
-|---|---|---|---|
-| Árbol de decisión | ___ | ___ | ___ |
-| Random Forest | ___ | ___ | ___ |
-| LightGBM | ___ | ___ | ___ |
-| LightGBM sin variables de la fórmula | ___ | ___ | ___ |
+Entrenado el 23/11/2026 con Open Food Facts. De 356.027 filas leídas quedaron 252.684 tras la limpieza, repartidas en 177.135 para entrenar, 37.989 para validar y 37.560 para test. El detalle completo está en `docs/resultados/metricas_modelos.json`.
 
-- **Política de aprobación `qp-1`:** ver `docs/ml-lifecycle.md` §4.
-- **Rendimiento por grupo de alimento (`pnns_groups_1`):** se reporta como advertencia de sesgo.
+| Modelo | F1 macro validación | Accuracy validación | F1 macro test | Tamaño | Política qp-1 |
+|---|---|---|---|---|---|
+| Árbol de decisión | 0.921 | 0.923 | 0.922 | 0.2 MB | Aprobado |
+| Random Forest | 0.888 | 0.892 | 0.891 | 44.9 MB | Rechazado por tamaño |
+| LightGBM | 0.979 | 0.980 | 0.979 | 5.7 MB | Aprobado |
+| LightGBM sin variables de la fórmula | 0.669 | 0.670 | 0.668 | 5.6 MB | Rechazado |
+
+- **LightGBM por clase en validación.** Precisión y recall superan 0.95 en las cinco clases. La clase más difícil es B, con precisión 0.958 y recall 0.971.
+- **Errores.** Casi todos son entre grados vecinos, por ejemplo C confundida con B o con D.
+- **Experimento sin la fórmula.** Al quitar energía, grasas saturadas, azúcares, fibra, proteínas, sal y porcentaje de frutas y verduras, el F1 macro baja de 0.979 a 0.669. La diferencia de 0.31 muestra cuánto del resultado viene de aproximar la fórmula.
+- **Advertencia de sesgo.** El grupo frutas y verduras obtiene F1 macro 0.679 en validación, por debajo del umbral de 0.70. Es una advertencia, no bloquea la aprobación.
+- **Calibración pendiente.** El árbol de decisión de referencia ya supera el suelo de 0.80 de qp-1 por 0.12. El suelo debería subir en una política qp-2, justificada con estos resultados. No se modificó qp-1.
 
 ## Limitaciones y riesgos
 

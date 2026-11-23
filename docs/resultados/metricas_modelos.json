@@ -1,0 +1,1264 @@
+{
+ "fecha": "2026-11-23",
+ "dataset": {
+  "rows_read": 356027,
+  "rows_without_target": 101171,
+  "rows_invalid_target": 0,
+  "rows_without_code": 0,
+  "rows_missing_required": 463,
+  "rows_inconsistent": {
+   "saturated_fat_gt_fat": 234,
+   "trans_fat_gt_fat": 41,
+   "sugars_gt_carbohydrates": 527,
+   "macros_sum_gt_100": 923
+  },
+  "values_out_of_range": {
+   "energy_100g": 189,
+   "fat_100g": 3,
+   "saturated_fat_100g": 1,
+   "trans_fat_100g": 9,
+   "cholesterol_100g": 0,
+   "carbohydrates_100g": 12,
+   "sugars_100g": 15,
+   "fiber_100g": 10,
+   "proteins_100g": 4,
+   "salt_100g": 58,
+   "calcium_100g": 7,
+   "iron_100g": 1,
+   "vitamin_a_100g": 0,
+   "vitamin_c_100g": 2,
+   "fruits_vegetables_nuts_100g": 0,
+   "additives_n": 0,
+   "ingredients_from_palm_oil_n": 0,
+   "ingredients_that_may_be_from_palm_oil_n": 0
+  },
+  "duplicate_codes": 0,
+  "rows_final": 252684,
+  "sha256": "9343ca30d79a440e18c3fbf379d27aa5450d77ba3a1066e3eee2a213e9abc4a5",
+  "class_distribution": {
+   "A": 40193,
+   "B": 38743,
+   "C": 52546,
+   "D": 71785,
+   "E": 49417
+  }
+ },
+ "modelos": {
+  "decision_tree": {
+   "algoritmo": "decision_tree",
+   "filas": {
+    "test": 37560,
+    "train": 177135,
+    "val": 37989
+   },
+   "duracion_entrenamiento_s": 3.083,
+   "tamano_bytes": 217636,
+   "validacion": {
+    "accuracy": 0.9227671167969675,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       5785,
+       330,
+       32,
+       2,
+       1
+      ],
+      [
+       275,
+       5210,
+       287,
+       19,
+       10
+      ],
+      [
+       25,
+       480,
+       7013,
+       318,
+       11
+      ],
+      [
+       0,
+       16,
+       468,
+       9822,
+       394
+      ],
+      [
+       3,
+       18,
+       21,
+       224,
+       7225
+      ]
+     ]
+    },
+    "f1_macro": 0.9212315760394618,
+    "n": 37989,
+    "per_class": {
+     "A": {
+      "f1": 0.9454159176336002,
+      "precision": 0.9502299605781866,
+      "recall": 0.9406504065040651,
+      "support": 6150
+     },
+     "B": {
+      "f1": 0.878954027836356,
+      "precision": 0.8605880409646515,
+      "recall": 0.8981210136183416,
+      "support": 5801
+     },
+     "C": {
+      "f1": 0.8952004084758743,
+      "precision": 0.896688403017517,
+      "recall": 0.8937173442079775,
+      "support": 7847
+     },
+     "D": {
+      "f1": 0.9316575764761679,
+      "precision": 0.9457871930669235,
+      "recall": 0.9179439252336449,
+      "support": 10700
+     },
+     "E": {
+      "f1": 0.9549299497753106,
+      "precision": 0.9455568642847795,
+      "recall": 0.9644907221999733,
+      "support": 7491
+     }
+    },
+    "precision_macro": 0.9197700923824115,
+    "recall_macro": 0.9229846823528005,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8848870056497176,
+       "f1_macro": 0.8349497924606283,
+       "support": 1416
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.8986645718774549,
+       "f1_macro": 0.8591111854296178,
+       "support": 1273
+      },
+      "composite foods": {
+       "accuracy": 0.8357628765792031,
+       "f1_macro": 0.8523441239422382,
+       "support": 1029
+      },
+      "fat and sauces": {
+       "accuracy": 0.8594527363184079,
+       "f1_macro": 0.8156877534123199,
+       "support": 804
+      },
+      "fish meat eggs": {
+       "accuracy": 0.959830866807611,
+       "f1_macro": 0.9581534566760892,
+       "support": 946
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8589743589743589,
+       "f1_macro": 0.4813588211175107,
+       "support": 780
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9534184823441022,
+       "f1_macro": 0.9481741424046302,
+       "support": 1331
+      },
+      "salty snacks": {
+       "accuracy": 0.9029850746268657,
+       "f1_macro": 0.9222723339392938,
+       "support": 402
+      },
+      "sugary snacks": {
+       "accuracy": 0.92845615922539,
+       "f1_macro": 0.8716063780947962,
+       "support": 1859
+      },
+      "unknown": {
+       "accuracy": 0.9297310739280259,
+       "f1_macro": 0.928925684482542,
+       "support": 28149
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "test": {
+    "accuracy": 0.9232428115015975,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       5667,
+       326,
+       24,
+       0,
+       4
+      ],
+      [
+       256,
+       5065,
+       276,
+       11,
+       10
+      ],
+      [
+       24,
+       482,
+       7078,
+       318,
+       11
+      ],
+      [
+       1,
+       18,
+       466,
+       9866,
+       429
+      ],
+      [
+       3,
+       12,
+       15,
+       197,
+       7001
+      ]
+     ]
+    },
+    "f1_macro": 0.9218236716994225,
+    "n": 37560,
+    "per_class": {
+     "A": {
+      "f1": 0.9467089876378216,
+      "precision": 0.9522769282473534,
+      "recall": 0.9412057797708022,
+      "support": 6021
+     },
+     "B": {
+      "f1": 0.8792639527818765,
+      "precision": 0.8580382856174826,
+      "recall": 0.901566393734425,
+      "support": 5618
+     },
+     "C": {
+      "f1": 0.8975399442049201,
+      "precision": 0.9006234889935106,
+      "recall": 0.8944774421837483,
+      "support": 7913
+     },
+     "D": {
+      "f1": 0.9319856414131872,
+      "precision": 0.9493841416474211,
+      "recall": 0.915213358070501,
+      "support": 10780
+     },
+     "E": {
+      "f1": 0.9536198324593067,
+      "precision": 0.9391012743125419,
+      "recall": 0.9685943552850028,
+      "support": 7228
+     }
+    },
+    "precision_macro": 0.919884823763662,
+    "recall_macro": 0.9242114658088958,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8814147018030514,
+       "f1_macro": 0.8062093557249985,
+       "support": 1442
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.9282296650717703,
+       "f1_macro": 0.8776338296468504,
+       "support": 1254
+      },
+      "composite foods": {
+       "accuracy": 0.8323471400394478,
+       "f1_macro": 0.8247276839472288,
+       "support": 1014
+      },
+      "fat and sauces": {
+       "accuracy": 0.851063829787234,
+       "f1_macro": 0.7537732450822467,
+       "support": 799
+      },
+      "fish meat eggs": {
+       "accuracy": 0.954954954954955,
+       "f1_macro": 0.9579787606726828,
+       "support": 999
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8598130841121495,
+       "f1_macro": 0.5574026416639631,
+       "support": 749
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9417249417249417,
+       "f1_macro": 0.9361127622671763,
+       "support": 1287
+      },
+      "salty snacks": {
+       "accuracy": 0.9056179775280899,
+       "f1_macro": 0.8065935204839209,
+       "support": 445
+      },
+      "sugary snacks": {
+       "accuracy": 0.9318559556786704,
+       "f1_macro": 0.8706979724833814,
+       "support": 1805
+      },
+      "unknown": {
+       "accuracy": 0.9300223294676943,
+       "f1_macro": 0.9293218656747477,
+       "support": 27766
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "politica": {
+    "version": "qp-1",
+    "aprobado": true,
+    "fallos": [],
+    "advertencias": [
+     "slice_fruits and vegetables"
+    ]
+   }
+  },
+  "random_forest": {
+   "algoritmo": "random_forest",
+   "filas": {
+    "test": 37560,
+    "train": 177135,
+    "val": 37989
+   },
+   "duracion_entrenamiento_s": 9.899,
+   "tamano_bytes": 47033092,
+   "validacion": {
+    "accuracy": 0.8921793150648872,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       5469,
+       586,
+       89,
+       2,
+       4
+      ],
+      [
+       362,
+       4888,
+       531,
+       9,
+       11
+      ],
+      [
+       26,
+       644,
+       6731,
+       432,
+       14
+      ],
+      [
+       2,
+       18,
+       541,
+       9691,
+       448
+      ],
+      [
+       2,
+       5,
+       8,
+       362,
+       7114
+      ]
+     ]
+    },
+    "f1_macro": 0.8883951179886382,
+    "n": 37989,
+    "per_class": {
+     "A": {
+      "f1": 0.9106652235450837,
+      "precision": 0.9331172154922368,
+      "recall": 0.8892682926829268,
+      "support": 6150
+     },
+     "B": {
+      "f1": 0.8186233461731703,
+      "precision": 0.7959615697769094,
+      "recall": 0.8426133425271505,
+      "support": 5801
+     },
+     "C": {
+      "f1": 0.8548929954912047,
+      "precision": 0.8520253164556962,
+      "recall": 0.8577800433286606,
+      "support": 7847
+     },
+     "D": {
+      "f1": 0.9144178146820154,
+      "precision": 0.9233041158536586,
+      "recall": 0.9057009345794392,
+      "support": 10700
+     },
+     "E": {
+      "f1": 0.9433762100517172,
+      "precision": 0.9371624291924647,
+      "recall": 0.9496729408623682,
+      "support": 7491
+     }
+    },
+    "precision_macro": 0.8883141293541931,
+    "recall_macro": 0.8890071107961092,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8820621468926554,
+       "f1_macro": 0.8224107832228855,
+       "support": 1416
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.8625294579732914,
+       "f1_macro": 0.8311949765091056,
+       "support": 1273
+      },
+      "composite foods": {
+       "accuracy": 0.7687074829931972,
+       "f1_macro": 0.7960093426862547,
+       "support": 1029
+      },
+      "fat and sauces": {
+       "accuracy": 0.8942786069651741,
+       "f1_macro": 0.8665504656921001,
+       "support": 804
+      },
+      "fish meat eggs": {
+       "accuracy": 0.904862579281184,
+       "f1_macro": 0.9007568860836775,
+       "support": 946
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8730769230769231,
+       "f1_macro": 0.5138267048312003,
+       "support": 780
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9135987978963186,
+       "f1_macro": 0.8851706171205069,
+       "support": 1331
+      },
+      "salty snacks": {
+       "accuracy": 0.9154228855721394,
+       "f1_macro": 0.7851402643633791,
+       "support": 402
+      },
+      "sugary snacks": {
+       "accuracy": 0.9176976869284562,
+       "f1_macro": 0.85368484090328,
+       "support": 1859
+      },
+      "unknown": {
+       "accuracy": 0.8955557923904934,
+       "f1_macro": 0.8926650052999971,
+       "support": 28149
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "test": {
+    "accuracy": 0.8942225772097977,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       5405,
+       526,
+       86,
+       0,
+       4
+      ],
+      [
+       355,
+       4740,
+       498,
+       12,
+       13
+      ],
+      [
+       30,
+       612,
+       6790,
+       465,
+       16
+      ],
+      [
+       6,
+       20,
+       506,
+       9762,
+       486
+      ],
+      [
+       2,
+       8,
+       5,
+       323,
+       6890
+      ]
+     ]
+    },
+    "f1_macro": 0.8906256212266399,
+    "n": 37560,
+    "per_class": {
+     "A": {
+      "f1": 0.9146289872239615,
+      "precision": 0.9322180062090376,
+      "recall": 0.8976914133864806,
+      "support": 6021
+     },
+     "B": {
+      "f1": 0.8226310308920514,
+      "precision": 0.8025736539112767,
+      "recall": 0.8437166251334994,
+      "support": 5618
+     },
+     "C": {
+      "f1": 0.8596024813267502,
+      "precision": 0.8611287254280279,
+      "recall": 0.8580816378111967,
+      "support": 7913
+     },
+     "D": {
+      "f1": 0.9148158560584763,
+      "precision": 0.9242567695512214,
+      "recall": 0.9055658627087199,
+      "support": 10780
+     },
+     "E": {
+      "f1": 0.9414497506319601,
+      "precision": 0.9299500607369415,
+      "recall": 0.9532374100719424,
+      "support": 7228
+     }
+    },
+    "precision_macro": 0.890025443167301,
+    "recall_macro": 0.8916585898223678,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8654646324549237,
+       "f1_macro": 0.8007938423322616,
+       "support": 1442
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.8891547049441786,
+       "f1_macro": 0.8609377598163664,
+       "support": 1254
+      },
+      "composite foods": {
+       "accuracy": 0.7938856015779092,
+       "f1_macro": 0.8220594251757294,
+       "support": 1014
+      },
+      "fat and sauces": {
+       "accuracy": 0.8748435544430538,
+       "f1_macro": 0.8018823905822561,
+       "support": 799
+      },
+      "fish meat eggs": {
+       "accuracy": 0.91991991991992,
+       "f1_macro": 0.9201216576000109,
+       "support": 999
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8611481975967957,
+       "f1_macro": 0.5346870867999756,
+       "support": 749
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9090909090909091,
+       "f1_macro": 0.8792762821119309,
+       "support": 1287
+      },
+      "salty snacks": {
+       "accuracy": 0.8831460674157303,
+       "f1_macro": 0.6965255315074181,
+       "support": 445
+      },
+      "sugary snacks": {
+       "accuracy": 0.9130193905817174,
+       "f1_macro": 0.8478363383450958,
+       "support": 1805
+      },
+      "unknown": {
+       "accuracy": 0.8984009219909241,
+       "f1_macro": 0.8954603491792931,
+       "support": 27766
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "politica": {
+    "version": "qp-1",
+    "aprobado": false,
+    "fallos": [
+     "artifact_size"
+    ],
+    "advertencias": [
+     "slice_fruits and vegetables"
+    ]
+   }
+  },
+  "lightgbm": {
+   "algoritmo": "lightgbm",
+   "filas": {
+    "test": 37560,
+    "train": 177135,
+    "val": 37989
+   },
+   "duracion_entrenamiento_s": 16.111,
+   "tamano_bytes": 5934624,
+   "validacion": {
+    "accuracy": 0.9796520045276265,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       6026,
+       117,
+       6,
+       0,
+       1
+      ],
+      [
+       55,
+       5633,
+       101,
+       4,
+       8
+      ],
+      [
+       5,
+       118,
+       7633,
+       84,
+       7
+      ],
+      [
+       1,
+       11,
+       129,
+       10492,
+       67
+      ],
+      [
+       3,
+       3,
+       7,
+       46,
+       7432
+      ]
+     ]
+    },
+    "f1_macro": 0.9788764583387289,
+    "n": 37989,
+    "per_class": {
+     "A": {
+      "f1": 0.984640522875817,
+      "precision": 0.9894909688013136,
+      "recall": 0.9798373983739838,
+      "support": 6150
+     },
+     "B": {
+      "f1": 0.9643071128990841,
+      "precision": 0.9576674600476028,
+      "recall": 0.971039475952422,
+      "support": 5801
+     },
+     "C": {
+      "f1": 0.9709343000699612,
+      "precision": 0.9691467750126967,
+      "recall": 0.9727284312476105,
+      "support": 7847
+     },
+     "D": {
+      "f1": 0.9839632373628435,
+      "precision": 0.9873894221720309,
+      "recall": 0.9805607476635514,
+      "support": 10700
+     },
+     "E": {
+      "f1": 0.990537118485939,
+      "precision": 0.9889554224883567,
+      "recall": 0.9921238819917234,
+      "support": 7491
+     }
+    },
+    "precision_macro": 0.9785300097044003,
+    "recall_macro": 0.9792579870458582,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.9357344632768362,
+       "f1_macro": 0.9015427580464012,
+       "support": 1416
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.9748625294579732,
+       "f1_macro": 0.9707433425388651,
+       "support": 1273
+      },
+      "composite foods": {
+       "accuracy": 0.9582118561710399,
+       "f1_macro": 0.9682433560631949,
+       "support": 1029
+      },
+      "fat and sauces": {
+       "accuracy": 0.9564676616915423,
+       "f1_macro": 0.9484621811479121,
+       "support": 804
+      },
+      "fish meat eggs": {
+       "accuracy": 0.9862579281183932,
+       "f1_macro": 0.9857922862066918,
+       "support": 946
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.9192307692307692,
+       "f1_macro": 0.6785679505176347,
+       "support": 780
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9842223891810669,
+       "f1_macro": 0.9871919890216251,
+       "support": 1331
+      },
+      "salty snacks": {
+       "accuracy": 0.9800995024875622,
+       "f1_macro": 0.9426609387202477,
+       "support": 402
+      },
+      "sugary snacks": {
+       "accuracy": 0.9736417428725122,
+       "f1_macro": 0.9153783621110835,
+       "support": 1859
+      },
+      "unknown": {
+       "accuracy": 0.9851504493942946,
+       "f1_macro": 0.9848517650109955,
+       "support": 28149
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "test": {
+    "accuracy": 0.9787806176783812,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       5932,
+       80,
+       6,
+       0,
+       3
+      ],
+      [
+       52,
+       5459,
+       97,
+       4,
+       6
+      ],
+      [
+       7,
+       125,
+       7665,
+       107,
+       9
+      ],
+      [
+       5,
+       12,
+       138,
+       10549,
+       76
+      ],
+      [
+       3,
+       4,
+       4,
+       59,
+       7158
+      ]
+     ]
+    },
+    "f1_macro": 0.9784504371245859,
+    "n": 37560,
+    "per_class": {
+     "A": {
+      "f1": 0.9870216306156406,
+      "precision": 0.9888314719119853,
+      "recall": 0.985218402258761,
+      "support": 6021
+     },
+     "B": {
+      "f1": 0.9663657284475128,
+      "precision": 0.9610915492957747,
+      "recall": 0.9716981132075472,
+      "support": 5618
+     },
+     "C": {
+      "f1": 0.9688428237375971,
+      "precision": 0.9690265486725663,
+      "recall": 0.9686591684569695,
+      "support": 7913
+     },
+     "D": {
+      "f1": 0.9813479696730081,
+      "precision": 0.9841403115962309,
+      "recall": 0.9785714285714285,
+      "support": 10780
+     },
+     "E": {
+      "f1": 0.9886740331491712,
+      "precision": 0.9870380584666298,
+      "recall": 0.9903154399557277,
+      "support": 7228
+     }
+    },
+    "precision_macro": 0.9780255879886376,
+    "recall_macro": 0.978892510490087,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.9237170596393898,
+       "f1_macro": 0.8789597995314585,
+       "support": 1442
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.9840510366826156,
+       "f1_macro": 0.9840613530176467,
+       "support": 1254
+      },
+      "composite foods": {
+       "accuracy": 0.9674556213017751,
+       "f1_macro": 0.9749447381461767,
+       "support": 1014
+      },
+      "fat and sauces": {
+       "accuracy": 0.9336670838548186,
+       "f1_macro": 0.8737643060974669,
+       "support": 799
+      },
+      "fish meat eggs": {
+       "accuracy": 0.990990990990991,
+       "f1_macro": 0.9904926049764443,
+       "support": 999
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.9279038718291055,
+       "f1_macro": 0.6178470051707785,
+       "support": 749
+      },
+      "milk and dairy products": {
+       "accuracy": 0.9782439782439782,
+       "f1_macro": 0.9784965144084333,
+       "support": 1287
+      },
+      "salty snacks": {
+       "accuracy": 0.9617977528089887,
+       "f1_macro": 0.9411804159033498,
+       "support": 445
+      },
+      "sugary snacks": {
+       "accuracy": 0.9772853185595568,
+       "f1_macro": 0.9319485862379064,
+       "support": 1805
+      },
+      "unknown": {
+       "accuracy": 0.9844414031549377,
+       "f1_macro": 0.9843351634704339,
+       "support": 27766
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "politica": {
+    "version": "qp-1",
+    "aprobado": true,
+    "fallos": [],
+    "advertencias": [
+     "slice_fruits and vegetables"
+    ]
+   }
+  },
+  "lightgbm_sin_formula": {
+   "algoritmo": "lightgbm",
+   "filas": {
+    "test": 37560,
+    "train": 177135,
+    "val": 37989
+   },
+   "duracion_entrenamiento_s": 13.827,
+   "tamano_bytes": 5913364,
+   "validacion": {
+    "accuracy": 0.6703256205743768,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       4394,
+       1182,
+       437,
+       121,
+       16
+      ],
+      [
+       772,
+       3886,
+       899,
+       195,
+       49
+      ],
+      [
+       528,
+       1594,
+       4196,
+       1336,
+       193
+      ],
+      [
+       217,
+       678,
+       1426,
+       6887,
+       1492
+      ],
+      [
+       18,
+       382,
+       108,
+       881,
+       6102
+      ]
+     ]
+    },
+    "f1_macro": 0.6690005502932431,
+    "n": 37989,
+    "per_class": {
+     "A": {
+      "f1": 0.7275436708336783,
+      "precision": 0.7411030527913645,
+      "recall": 0.7144715447154472,
+      "support": 6150
+     },
+     "B": {
+      "f1": 0.5747245433705539,
+      "precision": 0.5032375032375033,
+      "recall": 0.6698845026719531,
+      "support": 5801
+     },
+     "C": {
+      "f1": 0.562730503587474,
+      "precision": 0.5938296065666573,
+      "recall": 0.5347266471262903,
+      "support": 7847
+     },
+     "D": {
+      "f1": 0.6845924453280318,
+      "precision": 0.731104033970276,
+      "recall": 0.6436448598130841,
+      "support": 10700
+     },
+     "E": {
+      "f1": 0.7954115883464772,
+      "precision": 0.7771268466632705,
+      "recall": 0.8145774929915899,
+      "support": 7491
+     }
+    },
+    "precision_macro": 0.6692802086458143,
+    "recall_macro": 0.6754610094636728,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8305084745762712,
+       "f1_macro": 0.7518372302306257,
+       "support": 1416
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.6787117046347211,
+       "f1_macro": 0.533084330528931,
+       "support": 1273
+      },
+      "composite foods": {
+       "accuracy": 0.43537414965986393,
+       "f1_macro": 0.46181576779998423,
+       "support": 1029
+      },
+      "fat and sauces": {
+       "accuracy": 0.6927860696517413,
+       "f1_macro": 0.5972770798651624,
+       "support": 804
+      },
+      "fish meat eggs": {
+       "accuracy": 0.686046511627907,
+       "f1_macro": 0.669191099682402,
+       "support": 946
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8461538461538461,
+       "f1_macro": 0.50814587324927,
+       "support": 780
+      },
+      "milk and dairy products": {
+       "accuracy": 0.8377160030052592,
+       "f1_macro": 0.7633863018168991,
+       "support": 1331
+      },
+      "salty snacks": {
+       "accuracy": 0.5970149253731343,
+       "f1_macro": 0.46299167391319235,
+       "support": 402
+      },
+      "sugary snacks": {
+       "accuracy": 0.7611619150080688,
+       "f1_macro": 0.5823277373157179,
+       "support": 1859
+      },
+      "unknown": {
+       "accuracy": 0.6515684393761768,
+       "f1_macro": 0.6521490045475875,
+       "support": 28149
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "test": {
+    "accuracy": 0.668716719914803,
+    "confusion_matrix": {
+     "labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E"
+     ],
+     "matrix": [
+      [
+       4289,
+       1177,
+       424,
+       114,
+       17
+      ],
+      [
+       782,
+       3751,
+       856,
+       190,
+       39
+      ],
+      [
+       564,
+       1474,
+       4299,
+       1396,
+       180
+      ],
+      [
+       203,
+       693,
+       1459,
+       6877,
+       1548
+      ],
+      [
+       16,
+       375,
+       106,
+       830,
+       5901
+      ]
+     ]
+    },
+    "f1_macro": 0.667860886564615,
+    "n": 37560,
+    "per_class": {
+     "A": {
+      "f1": 0.7223578947368421,
+      "precision": 0.7326614280833618,
+      "recall": 0.7123401428334164,
+      "support": 6021
+     },
+     "B": {
+      "f1": 0.5731968215158925,
+      "precision": 0.5021419009370817,
+      "recall": 0.6676753292986828,
+      "support": 5618
+     },
+     "C": {
+      "f1": 0.5710300856744371,
+      "precision": 0.6017637178051511,
+      "recall": 0.5432832048527739,
+      "support": 7913
+     },
+     "D": {
+      "f1": 0.6813295685342052,
+      "precision": 0.7310513447432763,
+      "recall": 0.6379406307977736,
+      "support": 10780
+     },
+     "E": {
+      "f1": 0.7913900623616978,
+      "precision": 0.7678594664931685,
+      "recall": 0.8164084117321527,
+      "support": 7228
+     }
+    },
+    "precision_macro": 0.667095571612408,
+    "recall_macro": 0.6755295439029598,
+    "slices": {
+     "column": "pnns_groups_1",
+     "groups": {
+      "beverages": {
+       "accuracy": 0.8314840499306518,
+       "f1_macro": 0.7587496663982642,
+       "support": 1442
+      },
+      "cereals and potatoes": {
+       "accuracy": 0.6985645933014354,
+       "f1_macro": 0.5480441832754112,
+       "support": 1254
+      },
+      "composite foods": {
+       "accuracy": 0.4526627218934911,
+       "f1_macro": 0.45143385344605313,
+       "support": 1014
+      },
+      "fat and sauces": {
+       "accuracy": 0.6871088861076345,
+       "f1_macro": 0.594184836492397,
+       "support": 799
+      },
+      "fish meat eggs": {
+       "accuracy": 0.6616616616616616,
+       "f1_macro": 0.653948592261359,
+       "support": 999
+      },
+      "fruits and vegetables": {
+       "accuracy": 0.8024032042723631,
+       "f1_macro": 0.3826046834880982,
+       "support": 749
+      },
+      "milk and dairy products": {
+       "accuracy": 0.822066822066822,
+       "f1_macro": 0.742304572188747,
+       "support": 1287
+      },
+      "salty snacks": {
+       "accuracy": 0.5752808988764045,
+       "f1_macro": 0.3616348930409103,
+       "support": 445
+      },
+      "sugary snacks": {
+       "accuracy": 0.7523545706371191,
+       "f1_macro": 0.5619425605646335,
+       "support": 1805
+      },
+      "unknown": {
+       "accuracy": 0.6518763955917309,
+       "f1_macro": 0.6524685619182605,
+       "support": 27766
+      }
+     },
+     "min_support": 200
+    }
+   },
+   "politica": {
+    "version": "qp-1",
+    "aprobado": false,
+    "fallos": [
+     "f1_macro_min",
+     "recall_B",
+     "precision_B",
+     "recall_C",
+     "precision_C",
+     "recall_D"
+    ],
+    "advertencias": [
+     "slice_cereals and potatoes",
+     "slice_composite foods",
+     "slice_fat and sauces",
+     "slice_fish meat eggs",
+     "slice_fruits and vegetables",
+     "slice_salty snacks",
+     "slice_sugary snacks",
+     "slice_unknown"
+    ]
+   }
+  }
+ }
+}
