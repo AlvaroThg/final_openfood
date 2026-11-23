@@ -1,0 +1,87 @@
+1
+00:00:00,500 --> 00:00:10,000
+Clasificador del Nutri-Score con Open Food Facts
+
+2
+00:00:10,000 --> 00:00:20,000
+Alvaro Fabián Baldiviezo Rodríguez
+Sistemas Inteligentes
+
+3
+00:00:20,500 --> 00:00:35,000
+El sistema corre en seis contenedores
+con servicios separados.
+
+4
+00:00:35,000 --> 00:00:50,000
+Solo el frontend está expuesto en el puerto 3000.
+Los demás viven en una red interna.
+
+5
+00:00:50,500 --> 00:01:05,000
+Creamos una cuenta nueva
+e iniciamos sesión.
+
+6
+00:01:05,000 --> 00:01:30,000
+El token de acceso dura 15 minutos y vive en memoria.
+La sesión se renueva con una cookie httpOnly.
+
+7
+00:01:30,500 --> 00:01:50,000
+El formulario se genera desde el contrato del backend.
+Ingresamos los nutrientes por 100 gramos.
+
+8
+00:01:50,000 --> 00:02:10,000
+Calorías y Energía, grasas saturadas, azúcares,
+proteínas y sal son obligatorios.
+
+9
+00:02:10,000 --> 00:02:30,000
+El resultado muestra el grado, la probabilidad
+por clase y la versión del modelo.
+
+10
+00:02:30,500 --> 00:02:50,000
+Si los valores son imposibles,
+el backend rechaza la solicitud.
+
+11
+00:02:50,500 --> 00:03:05,000
+El historial guarda cada predicción
+con la versión exacta del modelo.
+
+12
+00:03:05,000 --> 00:03:20,000
+Otro usuario no ve estos registros.
+Lo garantiza la base de datos además del código.
+
+13
+00:03:20,500 --> 00:03:35,000
+LightGBM obtiene un F1 macro de 0.979
+con datos reales.
+
+14
+00:03:35,000 --> 00:03:50,000
+La política de calidad evalúa cada versión
+antes de aprobarla.
+
+15
+00:03:50,500 --> 00:04:10,000
+Solo un administrador puede entrenar
+y activar versiones.
+
+16
+00:04:10,000 --> 00:04:30,000
+Se puede volver a una versión anterior
+si algo sale mal.
+
+17
+00:04:30,500 --> 00:04:45,000
+La API está documentada con Swagger
+y cubierta por 347 pruebas automáticas.
+
+18
+00:04:45,000 --> 00:05:00,000
+Gracias.
