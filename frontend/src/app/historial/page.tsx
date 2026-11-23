@@ -43,7 +43,7 @@ function HistoryTable() {
             <tr>
               <th>Fecha</th>
               <th>Grado</th>
-              <th className="num">Energía (kJ)</th>
+              <th className="num">Calorías/Energía (kJ)</th>
               <th className="num">Azúcares</th>
               <th className="num">Grasas sat.</th>
               <th className="num">Sal</th>
