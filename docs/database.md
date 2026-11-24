@@ -70,3 +70,26 @@ cd db && MIGRATIONS_DATABASE_URL=postgresql://app_migrator:...@127.0.0.1:55432/<
 1. Se hizo un backup y se vació la tabla.
 2. Se restauró el backup.
 3. Volvieron los datos, las 3 políticas RLS, `FORCE RLS`, los 4 triggers y el dueño `app_migrator`.
+
+## Diagrama y generación del esquema
+
+- **Diagrama entidad relación:** `docs/diagramas/modelo-datos.excalidraw`. Se abre en https://excalidraw.com con *Open*, o con la extensión de Excalidraw en VS Code.
+- **Esquema completo en SQL:** `docs/database/schema.sql`, con tablas, índices, funciones, triggers, permisos y políticas RLS.
+
+Procedimiento para regenerar el esquema, que siempre sale de las migraciones y no de una base editada a mano:
+
+```bash
+bash scripts/export_schema.sh
+```
+
+El script levanta un PostgreSQL efímero con los mismos roles que producción, aplica las migraciones de Alembic desde cero, vuelca el esquema con `pg_dump --schema-only` y borra la base temporal.
+
+Para crear la base de datos desde cero sin el script, basta con levantar el sistema, porque `postgres` crea los roles y el contenedor `migrate` aplica las migraciones:
+
+```bash
+docker compose up -d postgres migrate
+```
+
+## Documentación de la API (Swagger)
+
+`python scripts/export_openapi.py` genera en `docs/swagger/` la especificación OpenAPI de cada servicio y una página Swagger UI por servicio (`auth_service.html`, `ia_backend.html`, `retrain_service.html`), que se abre con doble clic.

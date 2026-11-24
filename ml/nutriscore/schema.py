@@ -59,7 +59,9 @@ def _grams(
 
 NUMERIC_FEATURES: tuple[NumericFeature, ...] = (
     # 3800 kJ ≈ 900 kcal: máximo físico (grasa pura ≈ 3700 kJ).
-    NumericFeature("energy_100g", "energy_100g", "kJ/100g", 0.0, 3800.0, True, True, "Calorías/Energía"),
+    NumericFeature(
+        "energy_100g", "energy_100g", "kJ/100g", 0.0, 3800.0, True, True, "Calorías/Energía"
+    ),
     _grams("fat_100g", "fat_100g", "Grasas totales"),
     _grams("saturated_fat_100g", "saturated-fat_100g", "Grasas saturadas", formula=True,
            required=True),
